@@ -46,7 +46,7 @@ export function parseClaudeResult(stdout) {
   };
 }
 
-export function createClaudeCliAdapter(cfg) {
+export function createClaudeCliAdapter(cfg, deps = {}) {
   return {
     name: 'claude-cli',
     model: cfg.model || '(claude CLI default)',
@@ -60,7 +60,7 @@ export function createClaudeCliAdapter(cfg) {
         const t0 = Date.now();
         let res;
         try {
-          res = await run(bin, claudeArgs(cfg, system), { input: flattenMessages(messages), timeoutMs: cfg.timeoutMs, cwd });
+          res = await run(bin, claudeArgs(cfg, system), { input: flattenMessages(messages), timeoutMs: cfg.timeoutMs, cwd, spawnImpl: deps.spawn });
         } finally {
           removeDir(cwd);
         }

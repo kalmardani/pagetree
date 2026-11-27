@@ -3,6 +3,19 @@
 All notable changes to this project are documented here. The format follows Keep a
 Changelog and the project uses semantic versioning.
 
+## [0.1.1] 2026-11-27
+
+### Changed
+- The `claude-cli` and `codex-cli` adapters start the vendor CLI in a fresh, empty folder made
+  with `mkdtemp` under the OS temp dir (`pagetree-llm-` prefix) and remove it after every call,
+  also after an error or a timeout, now with retries for Windows. Project instruction files of
+  the folder you work in are never sent to the model.
+- Both adapters accept an injected spawn function, used by tests.
+
+### Added
+- A test that checks, with a fake spawn, that both adapters run in an empty folder inside the
+  OS temp dir, never the current directory, and that the folder is gone after the call.
+
 ## [0.1.0] 2026-11-27
 
 ### Added

@@ -47,6 +47,8 @@ not), checks whether it is already signed in, and otherwise starts that CLI's ow
 your terminal. pagetree only starts the official CLIs and never reads, copies or reuses the
 tokens they store, nor calls a vendor API with a subscription token.
 
+Both CLIs run from an empty temporary folder, so the project instruction files of the folder you work in (CLAUDE.md, AGENTS.md and similar) are not sent to the model, while the user level settings of each CLI still load as far as `--safe-mode` for claude and `--ignore-user-config` for codex leave them in place.
+
 ## Example output
 
 These are real outputs from `examples/tool-library.md` with `--provider claude-cli --model

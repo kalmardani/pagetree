@@ -34,7 +34,7 @@ test('parseArgs handles values, booleans, = form, short flags and rejects unknow
 });
 
 test('cli: help, version, unknown command and exit codes', async () => {
-  assert.equal((await cli(['--version'])).out.trim(), '0.1.0');
+  assert.equal((await cli(['--version'])).out.trim(), '0.1.1');
   assert.match((await cli(['--help'])).out, /pagetree auth login claude/);
   assert.equal((await cli([])).code, 2);
   assert.equal((await cli(['frobnicate'])).code, 2);

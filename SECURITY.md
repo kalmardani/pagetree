@@ -17,6 +17,7 @@ vulnerability. You will get an answer within a week.
   supports it. `pagetree auth status` shows only whether a token exists and when it expires.
 - For subscriptions, pagetree starts the official claude or codex CLI. It never reads, copies
   or reuses the credentials those CLIs store.
+- Both CLIs run from an empty temporary folder, so the project instruction files of the folder you work in (CLAUDE.md, AGENTS.md and similar) are not sent to the model, while the user level settings of each CLI still load as far as `--safe-mode` for claude and `--ignore-user-config` for codex leave them in place.
 
 ## Threat model summary
 

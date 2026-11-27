@@ -25,9 +25,9 @@ export function resolveBin(name, override) {
  * Run a command, feed stdin, collect stdout and stderr, kill on timeout.
  * @returns {Promise<{code:number|null, stdout:string, stderr:string, timedOut:boolean}>}
  */
-export function run(bin, args, { input = '', timeoutMs = 120000, cwd, env, inheritStdio = false } = {}) {
+export function run(bin, args, { input = '', timeoutMs = 120000, cwd, env, inheritStdio = false, spawnImpl = spawn } = {}) {
   return new Promise((resolve, reject) => {
-    const child = spawn(bin.command, [...bin.prefix, ...args], {
+    const child = spawnImpl(bin.command, [...bin.prefix, ...args], {
       shell: false,
       windowsHide: !inheritStdio,
       cwd,
@@ -57,14 +57,20 @@ export function run(bin, args, { input = '', timeoutMs = 120000, cwd, env, inher
   });
 }
 
-/** A fresh empty working directory, so the CLI does not pick up project files or instructions. */
+/**
+ * A fresh empty working directory for one vendor CLI call. The CLIs load instruction files
+ * (CLAUDE.md, AGENTS.md and similar) from their working directory and send them with every
+ * call, so neither the user's current directory nor the indexed document's folder may be used.
+ */
 export function freshWorkDir() {
-  return fs.mkdtempSync(path.join(os.tmpdir(), 'pagetree-'));
+  return fs.mkdtempSync(path.join(os.tmpdir(), 'pagetree-llm-'));
 }
 
+/** Called from a finally block, so it also runs after an error or a timeout. The retries cover
+ * Windows, where a killed process can hold the folder for a moment. */
 export function removeDir(dir) {
   try {
-    fs.rmSync(dir, { recursive: true, force: true });
+    fs.rmSync(dir, { recursive: true, force: true, maxRetries: 10, retryDelay: 100 });
   } catch {
     // best effort
   }

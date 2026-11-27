@@ -44,7 +44,7 @@ export function parseCodexEvents(stdout) {
   return { text, usage, error };
 }
 
-export function createCodexCliAdapter(cfg) {
+export function createCodexCliAdapter(cfg, deps = {}) {
   return {
     name: 'codex-cli',
     model: cfg.model || '(codex CLI default)',
@@ -57,7 +57,7 @@ export function createCodexCliAdapter(cfg) {
         const lastFile = path.join(cwd, 'last-message.txt');
         const t0 = Date.now();
         try {
-          const res = await run(bin, codexArgs(cfg, lastFile), { input: codexPrompt(system, messages), timeoutMs: cfg.timeoutMs, cwd });
+          const res = await run(bin, codexArgs(cfg, lastFile), { input: codexPrompt(system, messages), timeoutMs: cfg.timeoutMs, cwd, spawnImpl: deps.spawn });
           const ev = parseCodexEvents(res.stdout);
           let text = ev.text;
           if (text == null && fs.existsSync(lastFile)) text = fs.readFileSync(lastFile, 'utf8');

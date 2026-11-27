@@ -1,6 +1,6 @@
 {
   "name": "pagetree",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Retrieval over long documents without embeddings. Builds a table of contents tree, lets a language model navigate it, and answers with citations verified against the source.",
   "type": "module",
   "bin": {
